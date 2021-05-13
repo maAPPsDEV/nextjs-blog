@@ -4,8 +4,9 @@ import Head from 'next/head'
 import Date from '../../components/date'
 // Add this import at the top of the file
 import utilStyles from '../../styles/utils.module.css'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const paths = getAllPostIds()
   return {
     paths,
@@ -13,9 +14,9 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   // Add the "await" keyword like this:
-  const postData = await getPostData(params.id)
+  const postData = await getPostData(params.id as string)
   return {
     props: {
       postData
@@ -23,7 +24,15 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export default function Post({ postData }) {
+export default function Post(
+  { postData } : {
+    postData: {
+      title: string
+      date: string
+      contentHtml: string
+    }
+  }
+) {
   return (
     <Layout>
       <Head>
